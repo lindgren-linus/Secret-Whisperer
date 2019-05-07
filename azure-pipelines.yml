@@ -24,8 +24,8 @@ steps:
   - task: CopyFiles@2
     displayName: "Copy web.config "
     inputs:
-      sourceFolder: "$(System.DefaultWorkingDirectory)/web.config"
-      contents: ".npmrc"
+      sourceFolder: "$(System.DefaultWorkingDirectory)"
+      contents: "web.config"
       targetFolder: "$(System.DefaultWorkingDirectory)/Client/secret-whisperer/build"
 
   - task: ArchiveFiles@2
