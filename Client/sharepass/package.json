@@ -1,8 +1,8 @@
 {
   "name": "sharepass",
   "version": "0.1.0",
-  "author": "Linus Lindgren <lindgren.linus@outlook.com> (https://github.com/lindgren-linus)"
-  "license" : "MIT",
+  "author": "Linus Lindgren <lindgren.linus@outlook.com> (https://github.com/lindgren-linus)",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.0.0-beta.1",
