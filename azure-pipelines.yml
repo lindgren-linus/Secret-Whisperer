@@ -48,7 +48,7 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: 'development'
+    environment: 'production'
     pool: 
       vmImage: $(vmImageName)    
     strategy:
@@ -68,7 +68,7 @@ stages:
               WebAppName: $(webAppName)
               packageForLinux: '$(System.ArtifactsDirectory)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|10.10'
-              StartupCommand: 'npm run start'
+              StartupCommand: 'serve -s build'
               ScriptType: 'Inline Script'
               InlineScript: |
                 npm install
