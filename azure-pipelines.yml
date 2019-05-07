@@ -16,7 +16,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install
+    npm install --production
     npm run build
   workingDirectory: './Client/secret-whisperer'
   displayName: 'npm install and build'
