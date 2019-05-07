@@ -109,7 +109,7 @@ function App() {
           color="secondary"
           style={{ marginBottom: "2rem", textAlign: "center" }}
         >
-          SharePass
+          Secret Whisperer
         </Typography>
         <Paper className={classes.paper}>
           <Grid
