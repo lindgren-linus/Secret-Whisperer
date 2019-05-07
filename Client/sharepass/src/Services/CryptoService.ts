@@ -27,7 +27,7 @@ export const encrypt = async (
   data: ArrayBuffer
 ) => {
   const cryptoKey = await importCryptoKey(key);
-  return window.crypto.subtle.encrypt(getAesParams, cryptoKey, data);
+  return window.crypto.subtle.encrypt(getAesParams(iv), cryptoKey, data);
 };
 
 export const decrypt = async (
@@ -36,5 +36,9 @@ export const decrypt = async (
   encryptedData: ArrayBuffer
 ) => {
   const cryptoKey = await importCryptoKey(key);
-  return window.crypto.subtle.decrypt(getAesParams, cryptoKey, encryptedData);
+  return window.crypto.subtle.decrypt(
+    getAesParams(iv),
+    cryptoKey,
+    encryptedData
+  );
 };

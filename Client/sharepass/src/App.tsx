@@ -11,7 +11,11 @@ import {
 import { useStyles } from "./App.styles";
 import { useDebounce } from "./Util";
 import { Canvas } from "./Canvas";
-import { encrypt, generateInitialVector } from "./Services/CryptoService";
+import {
+  encrypt,
+  generateInitialVector,
+  decrypt
+} from "./Services/CryptoService";
 import {
   blobToArrayBuffer,
   getImageUrlFromData
@@ -65,7 +69,9 @@ function App() {
   const encryptData = async () => {
     setEncrypting(true);
     if (data) {
-      setEncryptedData(await encrypt(encryptKey, iv, data));
+      const encryptedData = await encrypt(encryptKey, iv, data);
+      debugger;
+      setEncryptedData(encryptedData);
       setEncrypting(false);
     }
   };
@@ -76,7 +82,7 @@ function App() {
     setDecryptionFailed(false);
     if (encryptedData) {
       try {
-        setDecryptedData(await encrypt(decryptKey, iv, encryptedData));
+        setDecryptedData(await decrypt(decryptKey, iv, encryptedData));
         setDecrypting(false);
       } catch (exception) {
         setDecrypting(false);
