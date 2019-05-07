@@ -18,4 +18,14 @@ steps:
 - script: |
     npm install
     npm run build
+  workingDirectory: './Client/secret-whisperer'
   displayName: 'npm install and build'
+
+- task: ArchiveFiles@2
+  displayName: 'Package'
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Client/secret-whisperer/build'
+    includeRootFolder: false
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artefacts'
