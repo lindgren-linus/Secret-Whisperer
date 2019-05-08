@@ -69,7 +69,7 @@ export function Encode() {
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       <Input
-        placeholder="Your password"
+        placeholder="Your secret"
         onChange={handlePasswordChange}
         type="password"
       />
@@ -84,7 +84,7 @@ export function Encode() {
                 onChange={handleToggleShowPassword}
               />
             }
-            label="Show password"
+            label="Show secret"
           />
 
           <Canvas

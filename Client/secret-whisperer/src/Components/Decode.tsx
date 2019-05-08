@@ -22,11 +22,18 @@ export function Decode(props: {
   const [decryptedData, setDecryptedData] = useState<ArrayBuffer | null>(null);
 
   const [decryptionFailed, setDecryptionFailed] = useState<boolean>(false);
+  const [fetchFailed, setFetchFailed] = useState<boolean>(false);
 
   const fetchEncryptedData = async () => {
-    const data = await fetchData(props.match.params.token);
-    if (data) {
-      setEncryptedData(data);
+    try {
+      const data = await fetchData(props.match.params.token);
+      if (data) {
+        setEncryptedData(data);
+      } else {
+        setFetchFailed(true);
+      }
+    } catch (exception) {
+      setFetchFailed(true);
     }
   };
 
@@ -57,14 +64,27 @@ export function Decode(props: {
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Input placeholder="Your first name" onChange={handleDecryptKeyChange} />
-      <br />
+      {(fetchFailed && (
+        <Typography color="error">
+          The secret is not available anymore!
+        </Typography>
+      )) || (
+        <>
+          <Input
+            placeholder="Your first name"
+            onChange={handleDecryptKeyChange}
+          />
+          <br />
 
-      <Button onClick={decryptData}>Decrypt</Button>
+          <Button onClick={decryptData}>Reveal secret</Button>
 
-      {decryptedData && <img src={getImageUrlFromData(decryptedData)} />}
-      {decryptionFailed && (
-        <Typography color="error">Decryption failed</Typography>
+          {decryptedData && <img src={getImageUrlFromData(decryptedData)} />}
+          {decryptionFailed && (
+            <Typography color="error">
+              The secret does not belong to this name
+            </Typography>
+          )}
+        </>
       )}
     </Grid>
   );
