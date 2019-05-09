@@ -1,21 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Input, Typography, Button } from "@material-ui/core";
-
 import {
-  encrypt,
-  decrypt,
-  generateInitialVector
-} from "../Services/CryptoService";
-import { postData, fetchData } from "../api/Api";
+  Grid,
+  Input,
+  Typography,
+  Button,
+  CircularProgress
+} from "@material-ui/core";
+
+import { decrypt } from "../Services/CryptoService";
+import { fetchData } from "../api/Api";
 import { getImageUrlFromData } from "../Services/ImageService";
-import { fromStringToIV } from "../Services/EncodingService";
+import { fromStringToData } from "../Services/EncodingService";
+import { HomeLink } from "./HomeLink";
 
 export function Decode(props: {
-  match: { params: { token: string; iv: string } };
+  match: { params: { token: string; salt: string; iv: string } };
 }) {
-  const decodedIv = fromStringToIV(props.match.params.iv);
+  const decodedIv = fromStringToData(props.match.params.iv);
   const [iv] = useState<Uint8Array>(decodedIv);
+  const decodedSalt = fromStringToData(props.match.params.salt);
+  const [salt] = useState<Uint8Array>(decodedSalt);
+
   const [decryptKey, setDecryptKey] = useState<string>("");
+  const [fetching, setFetching] = useState<boolean>(true);
+
   const [decrypting, setDecrypting] = useState<boolean>(false);
 
   const [encryptedData, setEncryptedData] = useState<ArrayBuffer | null>(null);
@@ -25,6 +33,7 @@ export function Decode(props: {
   const [fetchFailed, setFetchFailed] = useState<boolean>(false);
 
   const fetchEncryptedData = async () => {
+    setFetching(true);
     try {
       const data = await fetchData(props.match.params.token);
       if (data) {
@@ -35,6 +44,7 @@ export function Decode(props: {
     } catch (exception) {
       setFetchFailed(true);
     }
+    setFetching(false);
   };
 
   useEffect(() => {
@@ -53,7 +63,7 @@ export function Decode(props: {
     setDecryptionFailed(false);
     if (encryptedData) {
       try {
-        setDecryptedData(await decrypt(decryptKey, iv, encryptedData));
+        setDecryptedData(await decrypt(decryptKey, salt, iv, encryptedData));
         setDecrypting(false);
       } catch (exception) {
         setDecrypting(false);
@@ -64,27 +74,36 @@ export function Decode(props: {
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      {(fetchFailed && (
-        <Typography color="error">
-          The secret is not available anymore!
-        </Typography>
-      )) || (
-        <>
-          <Input
-            placeholder="Your first name"
-            onChange={handleDecryptKeyChange}
-          />
-          <br />
+      {(fetching && <CircularProgress />) ||
+        (fetchFailed && (
+          <Typography color="error">
+            The secret is not available anymore!
+          </Typography>
+        )) || (
+          <>
+            {!decryptedData && (
+              <>
+                <Input
+                  placeholder="Your first name"
+                  onChange={handleDecryptKeyChange}
+                />
+                <br />
 
-          <Button onClick={decryptData}>Reveal secret</Button>
-
-          {decryptedData && <img src={getImageUrlFromData(decryptedData)} />}
-          {decryptionFailed && (
-            <Typography color="error">
-              The secret does not belong to this name
-            </Typography>
-          )}
-        </>
+                <Button onClick={decryptData}>Reveal secret</Button>
+              </>
+            )}
+            {decryptedData && <img src={getImageUrlFromData(decryptedData)} />}
+            {decryptionFailed && (
+              <>
+                <Typography color="error">
+                  The secret does not belong to this name
+                </Typography>
+              </>
+            )}
+          </>
+        )}
+      {(decryptedData || fetchFailed) && (
+        <Button component={HomeLink}>Share a new secret</Button>
       )}
     </Grid>
   );

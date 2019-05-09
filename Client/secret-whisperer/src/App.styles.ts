@@ -14,6 +14,8 @@ export const useStyles = makeStyles({
     backgroundImage: `url('${src}')`
   },
   paper: {
-    padding: "2rem"
+    padding: "2rem",
+    overflow: "auto",
+    maxWidth: "80%"
   }
 });

@@ -30,7 +30,7 @@ function App() {
 
               <Route
                 exact={true}
-                path="/decode/:token/:iv"
+                path="/decode/:token/:salt/:iv"
                 component={Decode}
               />
             </Switch>

@@ -1,4 +1,4 @@
-export const fromStringToIV = (hexString: string) => {
+export const fromStringToData = (hexString: string) => {
   var result = [];
   for (var i = 0; i < hexString.length; i += 2) {
     result.push(parseInt(hexString.substr(i, 2), 16));
@@ -7,6 +7,6 @@ export const fromStringToIV = (hexString: string) => {
   return Uint8Array.from(result);
 };
 
-export const fromIVToString = (data: Uint8Array) => {
+export const fromDataToString = (data: Uint8Array) => {
   return Buffer.from(data).toString("hex");
 };
