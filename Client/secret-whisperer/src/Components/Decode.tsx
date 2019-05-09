@@ -63,7 +63,13 @@ export function Decode(props: {
     setDecryptionFailed(false);
     if (encryptedData) {
       try {
-        setDecryptedData(await decrypt(decryptKey, salt, iv, encryptedData));
+        const data = await decrypt(decryptKey, salt, iv, encryptedData);
+        if (data) {
+          setDecryptedData(data);
+        } else {
+          setDecrypting(false);
+          setDecryptionFailed(true);
+        }
         setDecrypting(false);
       } catch (exception) {
         setDecrypting(false);

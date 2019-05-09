@@ -71,6 +71,12 @@ export function Encode() {
           salt
         )}/${fromDataToString(iv)}`
       );
+
+      console.log(encryptKey);
+      console.log(`iv: ` + iv.toString());
+      console.log(`salt: ` + salt.toString());
+      console.log(`Byte length of iv: ` + iv.byteLength);
+      console.log(`Byte length of salt: ` + salt.byteLength);
     }
   };
 

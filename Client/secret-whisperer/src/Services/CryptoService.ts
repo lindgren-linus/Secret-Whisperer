@@ -1,6 +1,3 @@
-var textEncoding = require("text-encoding");
-var TextEncoder = textEncoding.TextEncoder;
-
 export const AES_ALGORITHM = "AES-CBC";
 export const DERIVATION_ALGORITHM = "PBKDF2";
 export const ITERATIONS = 100000;
@@ -15,9 +12,10 @@ export const generateSalt = () => {
 };
 
 export const importCryptoKey = (key: string) => {
-  const enc = new TextEncoder();
   const encodedKey = new Uint8Array(32);
-  encodedKey.set(enc.encode(key.toLowerCase()) as Uint8Array);
+  const lowerCaseKey = key.toLowerCase();
+  const array = Buffer.from(lowerCaseKey) as Uint8Array;
+  encodedKey.set(array);
   return crypto.subtle.importKey(
     "raw",
     encodedKey,
@@ -72,7 +70,6 @@ export const decrypt = async (
 ) => {
   const masterKey = await importCryptoKey(key);
   const derivedKey = await deriveCryptoKey(masterKey, salt);
-
   return window.crypto.subtle.decrypt(
     getAesParams(iv),
     derivedKey,
